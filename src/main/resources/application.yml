@@ -1,0 +1,14 @@
+server:
+  port: 4444
+  
+spring:
+  application:
+    name: depositservice
+    
+eureka:
+  client:
+    enabled: true
+    serviceUrl:
+      defaultZone: http://microservices-eureka-service:8761/eureka/
+  instance:
+     hostname: depositservice

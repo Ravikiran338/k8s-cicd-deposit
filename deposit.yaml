@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: depositservice
+  labels:
+    app: msa-banking-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels: 
+      name: deposit-service
+      app: msa-banking-app
+
+  template:
+    metadata:
+      name: deposit-msa-pod
+      labels:
+        name: deposit-service
+        app: msa-banking-app
+    spec:
+      containers:
+      - name: deposit-container
+        image: ${REPOSITORY_TAG}
+        imagePullPolicy: Always
+        resources:
+          requests:
+            cpu: 300m
+            memory: 600Mi
+
+      imagePullSecrets:
+          - name: myregistrykey
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: depositservice
+  labels:
+    name: deposit-service
+    app: msa-banking-app
+
+spec:
+  type: ClusterIP
+  ports:
+  -  protocol: TCP
+     targetPort: 4444
+     port: 4444
+
+  selector:
+    name: deposit-service
+    app: msa-banking-app
